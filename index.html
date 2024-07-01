@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Typewriter Effect</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@650&display=swap');
+
+        body {
+            font-family: "Manrope", sans-serif;
+            display: flex;
+            justify-content: left;
+            align-items: center;
+            height: 100vh;
+            background-color: black;
+            margin: 0;
+        }
+        .typewriter {
+            font-size: 126px;
+            font-weight: bold;
+        }
+        .container {
+            display: flex;
+            align-items: center;
+        }
+        .static-text {
+            color: white;
+            margin-right: 10px;
+        }
+        .dynamic-text {
+            display: inline-block;
+            white-space: nowrap;
+        }
+        .cursor {
+            display: inline-block;
+            width: 10px;
+            height: 126px;
+            background-color: white;
+            margin-left: 2px;
+            animation: blink 1s step-end infinite;
+        }
+        @keyframes blink {
+            0%, 50%, 100% {
+                opacity: 1;
+            }
+            25%, 75% {
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="typewriter">
+            <span class="static-text">buildspace x</span>
+            <span class="dynamic-text"></span>
+            <span class="cursor"></span>
+        </div>
+    </div>
+
+    <script>
+        const words = [
+            { text: "mcmaster", color: "#7a003c" },
+            { text: "uw", color: "#FED34C" },
+            { text: "uoft", color: "#1E3765" },
+            { text: "guelph", color: "#C20430" },
+            { text: "western", color: "#4F2683" },
+            { text: "tmu", color: "#002D72" },
+            { text: "laurier", color: "#340273" },
+            { text: "uottawa", color: "#8F001A" },
+            { text: "brocku", color: "#CC0000" },
+            { text: "yorku", color: "#E31837" }
+        ];
+
+        let wordIndex = 0;
+        let charIndex = 0;
+        const typingSpeed = 100;
+        const erasingSpeed = 100;
+        const delayBetweenWords = 1000;
+
+        const dynamicTextElement = document.querySelector('.dynamic-text');
+        const cursorElement = document.querySelector('.cursor');
+
+        function type() {
+            if (charIndex < words[wordIndex].text.length) {
+                dynamicTextElement.textContent += words[wordIndex].text.charAt(charIndex);
+                dynamicTextElement.style.color = words[wordIndex].color;
+                cursorElement.style.backgroundColor = words[wordIndex].color;
+                charIndex++;
+                setTimeout(type, typingSpeed);
+            } else {
+                setTimeout(erase, delayBetweenWords);
+            }
+        }
+
+        function erase() {
+            if (charIndex > 0) {
+                dynamicTextElement.textContent = words[wordIndex].text.substring(0, charIndex - 1);
+                charIndex--;
+                setTimeout(erase, erasingSpeed);
+            } else {
+                wordIndex = (wordIndex + 1) % words.length;
+                setTimeout(type, typingSpeed);
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            if (words.length) setTimeout(type, delayBetweenWords);
+        });
+    </script>
+</body>
+</html>
